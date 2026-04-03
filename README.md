@@ -153,6 +153,6 @@ python Atelier.py
 ---
  
 ## 👤 Auteur 
-- 🔗 LinkedIn : [linkedin.com/in/ton-profil](https://ma.linkedin.com/in/aboubaker-oukim-2a052b22b)
+- 🔗 LinkedIn : [linkedin.com/in/aboubaker-oukim](https://ma.linkedin.com/in/aboubaker-oukim-2a052b22b)
  
 ---
