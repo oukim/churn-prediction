@@ -1,158 +1,72 @@
-# 📡 Prédiction du Churn Client — Télécommunications
- 
-> Atelier N°05 · Master MD3SI · Python Avancé (M113) · Université Sultan Moulay Slimane · FP Beni Mellal
+# Telco Customer Churn Prediction
 
-## 🎯 Contexte et objectif
- 
-Dans le domaine des télécommunications, la **perte de clients (churn)** représente un enjeu financier majeur. Ce projet construit un modèle prédictif capable d'identifier les clients susceptibles de quitter l'entreprise **avant qu'ils ne le fassent**, permettant des actions de rétention ciblées et proactives.
- 
-**Dataset** : [Telco Customer Churn — Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)  
-**7 043 clients** · **21 variables** · Variable cible : `Churn` (Yes/No)  
-**Déséquilibre** : 73.4% No Churn · 26.6% Churn ⚠️
- 
----
-## 📁 Structure du projet
- 
-```
-atelier05-churn-prediction/
-├── Atelier.py                            # Script Python principal
-├
-├── WA_Fn-UseC_-Telco-Customer-Churn.csv  # Dataset (à télécharger sur Kaggle)
-├── P3_distributions.png                  # Distribution des variables clés
-├── P4_analyse_descriptive.png            # Analyse Tenure MonthlyCharges
-├── P7_evaluation.png                     # Matrices de confusion + Courbes ROC
-├── P7_metriques.png                      # Comparaison des métriques
-├── P8_feature_importance.png             # Top 10 features importantes
-└── README.md
+> Workshop 05 · Master MD3SI · Advanced Python (M113) · Université Sultan Moulay Slimane, FP Beni Mellal
 
-##  Parties du projet
- 
-| Partie | Contenu |
-|--------|---------|
-| **P1 — Exploration** | Dimensions (7032 × 21), types, valeurs manquantes |
-| **P2 — Nettoyage** | Conversion TotalCharges, encodage catégorielles (LabelEncoder + get_dummies) |
-| **P3 — Compréhension** | Statistiques descriptives, distribution Churn déséquilibrée (73.4% / 26.6%) |
-| **P4 — Analyse** | Tenure moy. churners = 18 mois vs restés = 37.7 mois · Charges 74.4$ vs 61.3$ |
-| **P5 — Modélisation** | Régression Logistique · Arbre de Décision · KNN (k=7) |
-| **P7 — Évaluation** | Accuracy · Precision · Recall · F1-score · AUC-ROC |
-| **P8 — Métier** | Facteurs de churn, profils à risque, actions de rétention, déploiement |
- 
----
- 
-##  Résultats réels obtenus
- 
-| Modèle | Accuracy | Recall (Churn) | F1-score | AUC-ROC |
-|--------|:--------:|:--------------:|:--------:|:-------:|
-| Régression Logistique | **80%** | 57.49% | 0.61 | **0.836** |
-| **Arbre de Décision** ⭐ | 78% | **59.63%** | 0.59 | 0.820 |
-| KNN (k=7) | 75% | 53.21% | 0.53 | 0.781 |
- 
-> ⭐ **Meilleur modèle selon le Recall : Arbre de Décision (59.63%)**  
-> Le Recall est la métrique prioritaire — manquer un churner coûte plus cher que cibler un client fidèle.  
-> La Régression Logistique reste supérieure en AUC-ROC (0.836) et Accuracy (80%).
- 
----
- 
-##  Visualisations
- 
-**Distribution des variables clés (P3)**
-![P3](P3_distributions.png)
- 
-**Analyse descriptive — Tenure & MonthlyCharges (P4)**
-![P4](P4_analyse_descriptive.png)
- 
-**Évaluation des modèles — Confusion Matrix & ROC (P7)**
-![P7](P7_evaluation.png)
- 
-**Comparaison des métriques (P7)**
-![P7m](P7_metriques.png)
- 
-**Top 10 Features importantes — Arbre de Décision (P8)**
-![P8](P8_feature_importance.png)
- 
----
- 
-##  Principaux facteurs de churn identifiés
- 
-D'après la **feature importance de l'Arbre de Décision** :
- 
-1. **tenure** (importance ≈ 0.46) → les clients récents partent beaucoup plus
-2. **InternetService_Fiber optic** (≈ 0.34) → clientèle sensible aux offres concurrentes
-3. **TotalCharges** (≈ 0.04) → corrélé à l'ancienneté
-4. **PaymentMethod_Electronic check** → mode de paiement associé au churn
-5. **MonthlyCharges** → frais élevés augmentent le risque
- 
----
- 
-## Profils clients les plus à risque
- 
-| Profil | Caractéristiques | Risque estimé |
-|--------|-----------------|:-------------:|
-| 🔴 Très risqué | Contrat mensuel · tenure < 12 mois · Fibre optique | > 55% |
-| 🟠 Risqué | Senior · Sans partenaire · MonthlyCharges > 70$ | 40–55% |
-| 🟢 Fidèle | Contrat 2 ans · tenure > 36 mois · Avec partenaire | < 10% |
- 
----
- 
-##  Actions de rétention proposées
- 
--  **Migrer vers contrats longs** → réduction -15% sur contrat annuel ou -25% sur 2 ans
--  **Bonus fidélité** lors des 6 premiers mois (période la plus critique)
--  **Alerte proactive** si P(churn) > 60% → appel commercial sous 48h
--  **Support dédié seniors** → ligne prioritaire et interface simplifiée
--  **Scoring mensuel automatique** de chaque client dans le CRM
- 
----
- 
-##  Solution améliorée proposée
- 
-Les 3 modèles de l'atelier atteignent un Recall de 53–60%, insuffisant pour un déploiement en production. La solution recommandée :
- 
-```
-Random Forest + SMOTE + Seuil optimisé (0.40)
-→ Recall estimé : 72–75%
-→ Détection de ~280 churners sur 374 (vs 223 actuellement)
-```
- 
----
- 
-##  Installation et utilisation
- 
+## Overview
+
+This end-to-end Python project predicts which telecom customers are likely to leave (churn). It covers data exploration, cleaning, descriptive analysis, three classification models and an evaluation focused on business needs. The best model is chosen automatically by recall on the churn class.
+
+## Problem / Goal
+
+Losing customers is expensive for telecom operators. The goal is to spot likely churners early so retention teams can act. Missing a churner costs more than contacting a loyal customer, so **recall** is the main metric, with F1 and AUC-ROC as secondary metrics.
+
+## Dataset
+
+[Telco Customer Churn (IBM sample, Kaggle)](https://www.kaggle.com/datasets/blastchar/telco-customer-churn), file `WA_Fn-UseC_-Telco-Customer-Churn.csv`:
+- 7,043 customers and 21 columns; 7,032 remain after removing rows with an empty `TotalCharges`.
+- Target: `Churn` (Yes / No).
+- Imbalanced classes: about 73.4% No and 26.6% Yes.
+
+## Approach & techniques
+
+| Step | What the script does |
+|---|---|
+| Exploration | Shape, data types and missing values |
+| Cleaning | Converts `TotalCharges` to a number and drops invalid rows. Encodes categories with `LabelEncoder` for binary columns and `get_dummies` for the rest. |
+| Descriptive analysis | Distributions, churn rate, tenure and monthly charges for churners vs. non-churners |
+| Modelling | Stratified 80/20 split and `StandardScaler`. Three models: `LogisticRegression`, `DecisionTreeClassifier(max_depth=5)` and `KNeighborsClassifier(k=7)` |
+| Evaluation | Accuracy, precision, recall, F1, AUC-ROC, confusion matrices and ROC curves |
+| Interpretation | Top-10 feature importances from the decision tree, plus retention recommendations |
+
+## How to run
+
 ```bash
- 
-# Installer les dépendances
+git clone https://github.com/oukim/churn-prediction.git
+cd churn-prediction
 pip install pandas numpy matplotlib seaborn scikit-learn
- 
-# Télécharger le dataset depuis Kaggle :
-# https://www.kaggle.com/datasets/blastchar/telco-customer-churn
-# Placer WA_Fn-UseC_-Telco-Customer-Churn.csv dans le dossier
- 
-# Lancer le script
 python Atelier.py
 ```
- 
----
- 
-## 🛠️ Stack technique
- 
-| Outil | Usage |
-|-------|-------|
-| `pandas` / `numpy` | Manipulation et nettoyage des données |
-| `matplotlib` / `seaborn` | Visualisations |
-| `scikit-learn` | Modèles ML · métriques · prétraitement |
- 
----
- 
-## 📄 Livrables
- 
-- [x] Script Python complet et commenté (`Atelier.py`)
-- [x] 5 visualisations exportées (PNG)
-- [x] Sélection automatique du meilleur modèle selon le Recall
-- [x] Solution améliorée proposée : Random Forest + SMOTE + seuil optimisé
- 
----
- 
-## 👤 Auteur 
-- 🔗 LinkedIn : [linkedin.com/in/aboubaker-oukim](https://ma.linkedin.com/in/aboubaker-oukim-2a052b22b)
- 
----
+
+The dataset CSV is already in the repo. The script prints its analysis to the console and saves the charts as `P3_…` to `P8_…` PNG files.
+
+## Results
+
+These are test-set results (1,407 customers) from running `Atelier.py`:
+
+| Model | Accuracy | Precision | Recall (churn) | F1 | AUC-ROC |
+|---|:-:|:-:|:-:|:-:|:-:|
+| Logistic Regression | **0.804** | **0.648** | 0.575 | **0.609** | **0.836** |
+| **Decision Tree, max_depth=5 (selected by recall)** | 0.778 | 0.581 | **0.596** | 0.588 | 0.820 |
+| KNN, k=7 | 0.749 | 0.528 | 0.532 | 0.530 | 0.781 |
+
+- The decision tree has the best recall. Logistic regression is best on accuracy, precision, F1 and AUC-ROC.
+- The most important features in the decision tree are `tenure` and `InternetService_Fiber optic`, followed by `TotalCharges`.
+- In the data, churners have an average tenure of about 18 months, against about 38 months for customers who stay. They also pay more per month on average.
+- **Possible next step (not implemented):** class rebalancing such as SMOTE, tree ensembles and decision-threshold tuning to raise recall.
+
+### Visualisations
+
+| | |
+|---|---|
+| ![Distributions](P3_distributions.png) | ![Descriptive analysis](P4_analyse_descriptive.png) |
+| ![Confusion matrices & ROC](P7_evaluation.png) | ![Metric comparison](P7_metriques.png) |
+
+![Top 10 feature importances](P8_feature_importance.png)
+
+## Tech stack
+
+Python · pandas · NumPy · scikit-learn · matplotlib · seaborn
+
+## Author
+
+Aboubaker Oukim · [LinkedIn](https://ma.linkedin.com/in/aboubaker-oukim-2a052b22b)
